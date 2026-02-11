@@ -1,0 +1,49 @@
+/*
+Problem: Longest Balanced Subarray
+
+Definition:
+A subarray is called balanced if the number of DISTINCT even numbers 
+in the subarray is equal to the number of DISTINCT odd numbers.
+
+Goal:
+Return the length of the longest balanced subarray.
+
+Approach (Optimized O(n)):
+
+1. Maintain a HashSet to track distinct elements seen so far.
+2. Keep two counters:
+      - distinctEven
+      - distinctOdd
+3. Maintain diff = distinctEven - distinctOdd.
+4. Use HashMap to store first occurrence of each diff.
+5. If same diff appears again, it means subarray between them is balanced.
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+*/
+Code:
+public:
+    int longestBalanced(vector<int>& nums) {
+        int n = nums.size();
+        int maxLength = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (n - i <= maxLength) break; // pruning
+
+            unordered_set<int> even;
+            unordered_set<int> odd;
+
+            for (int j = i; j < n; j++) {
+                if (nums[j] % 2 == 0)
+                    even.insert(nums[j]);
+                else
+                    odd.insert(nums[j]);
+
+                if (even.size() == odd.size()) {
+                    maxLength = max(maxLength, j - i + 1);
+                }
+            }
+        }
+        return maxLength;
+    }
+};
